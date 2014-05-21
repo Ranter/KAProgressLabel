@@ -9,6 +9,13 @@
 #import <QuartzCore/QuartzCore.h>
 #import "KAProgressLabel.h"
 
+NSString *const KAProgressLabelFillColor = @"fillColor";
+NSString *const KAProgressLabelTrackColor = @"trackColor";
+NSString *const KAProgressLabelProgressColor = @"progressColor";
+
+@interface KAProgressLabel ()
+@property (nonatomic, strong) TPPropertyAnimation* animation;
+@end
 
 @implementation KAProgressLabel {
     radiansFromDegreesCompletion _radiansFromDegrees;
@@ -61,9 +68,9 @@
 
     // The Default values...
     NSMutableDictionary *mutableColorTable = [ @{
-            @"fillColor": [UIColor clearColor],
-            @"trackColor": [UIColor lightGrayColor],
-            @"progressColor": [UIColor blackColor],
+            KAProgressLabelFillColor: [UIColor clearColor],
+            KAProgressLabelTrackColor: [UIColor lightGrayColor],
+            KAProgressLabelProgressColor: [UIColor blackColor],
     } mutableCopy];
 
     // Overload with previous colors (in case they only want to change a single key color)
@@ -123,15 +130,21 @@
 
 -(void)setProgress:(CGFloat)progress timing:(TPPropertyAnimationTiming)timing duration:(CGFloat)duration delay:(CGFloat)delay {
 
-    TPPropertyAnimation *animation = [TPPropertyAnimation propertyAnimationWithKeyPath:@"progress"];
-    animation.fromValue = @(_progress);
-    animation.toValue = @(progress);
-    animation.duration = duration;
-    animation.startDelay = delay;
-    animation.timing = timing;
-    [animation beginWithTarget:self];
+    self.animation = [TPPropertyAnimation propertyAnimationWithKeyPath:@"progress"];
+    self.animation.fromValue = @(_progress);
+    self.animation.toValue = @(progress);
+    self.animation.duration = duration;
+    self.animation.startDelay = delay;
+    self.animation.timing = timing;
+    [self.animation beginWithTarget:self];
 }
 
+-(void) stopAnimation {
+    if (self.animation) {
+        [self.animation cancel];
+        self.animation = nil;
+    }
+}
 
 #pragma mark -
 #pragma mark Helpers

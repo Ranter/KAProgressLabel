@@ -8,6 +8,10 @@
 
 #import "TPPropertyAnimation.h"
 
+extern NSString *const KAProgressLabelFillColor;
+extern NSString *const KAProgressLabelTrackColor;
+extern NSString *const KAProgressLabelProgressColor;
+
 @class KAProgressLabel;
 
 typedef void(^progressLabelValueChangedCompletion)(KAProgressLabel *label, CGFloat progress);
@@ -42,6 +46,7 @@ UIColor *UIColorDefaultForColorInProgressLabelColorTableKey(ProgressLabelColorTa
 // Progress is a float between 0.0 and 1.0
 -(void)setProgress:(CGFloat)progress;
 -(void)setProgress:(CGFloat)progress timing:(TPPropertyAnimationTiming)timing duration:(CGFloat) duration delay:(CGFloat)delay;
+-(void) stopAnimation;
 
 
 @end
